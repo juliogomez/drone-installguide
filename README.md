@@ -26,7 +26,7 @@
 	Name, http://EC2_URL, Description, http://EC2_URL/authorization
 	Register application, and get your ‘Client ID’ (DRONE_GITHUB_CLIENT) and ‘Client Secret’ (DRONE_GITHUB_SECRET)
 
-5.- Install Drone
+5.- Install Drone Server
 
 	docker pull drone/drone:0.7
 	sudo mkdir /etc/drone
@@ -73,7 +73,7 @@
 
 2.- Create github and docker repos with the same name
 
-3.- Activate the repo in Drone
+3.- Activate the repo in the Drone server
 
     make sure the lab admin has enabled your github account in the lab server
     go to drone server url, login / authorize drone, activate repo
