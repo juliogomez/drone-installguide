@@ -1,4 +1,4 @@
-**Quick reference guide on how to install Drone**
+# Quick reference guide on how to install Drone
 
 1.- Create EC2 instance, with SG opening SSH & TCP
 
