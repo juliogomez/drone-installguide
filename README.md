@@ -1,5 +1,7 @@
 # Quick reference guide on how to install Drone
 
+## Drone Build Server
+
 1.- Create EC2 instance, with SG opening SSH & TCP. Its DNS name (EC2_URL) will be used as DRONE_HOST later in step 5.
 
 2.- Install docker
@@ -66,3 +68,41 @@
     Activate relevant repos
     Click on 'Show Token' and copy it (set DRONE_TOKEN)
     Set DRONE_SERVER to http://EC2_URL
+
+## Drone Client
+
+
+1.- Install Drone CLI (Mac)
+
+     curl http://downloads.drone.io/drone-cli/drone_darwin_amd64.tar.gz | tar zx
+     sudo cp drone /usr/local/bin
+
+2.- Create github and docker repos with the same name
+
+3.- Activate the repo in Drone
+
+    make sure the lab admin has enabled your github account in the lab server
+    go to drone server url, login / authorize drone, activate repo
+    
+4.- Build secrets file
+
+    cd to your local repo
+    export DRONE_SERVER=http://EC2_URL
+    export DRONE_TOKEN=<your_token>
+        (token can be found by going to EC2_URL, click on the user, go to profile, click on show token and copy the value)
+    drone repo ls
+    vi drone_secrets.yml
+    
+    environment:
+    SPARK_TOKEN: <FROM YOUR DEVELOPER.CISCOSPARK.COM ACCOUNT>
+    SPARK_ROOM: <EITHER ONE OF YOUR OWN ROOMS, OR A ROOMID PROVIDED BY THE LAB ADMIN>
+    DOCKER_USERNAME: <YOUR HUB.DOCKER.COM USERNAME>
+    DOCKER_PASSWORD: <YOUR HUB.DOCKER.COM PASSWORD>
+    DOCKER_EMAIL: <YOUR HUB.DOCKER.COM EMAIL ADDRESS>
+    MANTL_USERNAME: <MANTL USER PROVIDED BY LAB ADMIN>
+    MANTL_PASSWORD: <MANTL PASSWORD PROVIDED BY LAB ADMIN>
+    MANTL_CONTROL: <MANTL SERVER ADDRESS PROVIDED BY LAB ADMIN>
+    
+    (DO NOT ADD / COMMIT IT TO YOUR REPO)
+    
+    drone secure --repo <username>/<repo> --in drone_secrets.yml
