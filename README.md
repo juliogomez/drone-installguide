@@ -1,6 +1,6 @@
 # Quick reference guide on how to install Drone
 
-1.- Create EC2 instance, with SG opening SSH & TCP
+1.- Create EC2 instance, with SG opening SSH & TCP. Its DNS name will be DRONE_HOST.
 
 2.- Install docker
 
@@ -22,7 +22,7 @@
 	Go to Developer setting in the lower left 
 	OAuth Applications - Register a new application
 	Name, http://EC2_URL, Description, http://EC2_URL/authorization
-	Register application, and you get ‘Client ID’ and ‘Client Secret’
+	Register application, and you get ‘Client ID’ (DRONE_GITHUB_CLIENT) and ‘Client Secret’ (DRONE_GITHUB_SECRET)
 
 5.- Install Drone
 
