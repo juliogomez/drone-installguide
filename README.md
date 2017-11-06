@@ -1,6 +1,6 @@
 # Quick reference guide on how to install Drone
 
-1.- Create EC2 instance, with SG opening SSH & TCP. Its DNS name will be used as DRONE_HOST later in step 5.
+1.- Create EC2 instance, with SG opening SSH & TCP. Its DNS name (EC2_URL) will be used as DRONE_HOST later in step 5.
 
 2.- Install docker
 
