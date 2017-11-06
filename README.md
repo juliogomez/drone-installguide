@@ -1,4 +1,4 @@
-# Quick reference guide on how to install Drone
+# Quick reference guide to install Drone Server and Client
 
 ## Drone Build Server
 
@@ -15,7 +15,7 @@
 3.- Install docker-compose
 
 	sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-		(check latest from https://github.com/docker/compose/releases)
+		(check what's the latest version from https://github.com/docker/compose/releases)
 	sudo chmod +x /usr/local/bin/docker-compose
 
 4.- Configure GitHub
@@ -61,6 +61,8 @@
         environment:
           - DRONE_SERVER=ws://drone-server:8000/ws/broker
           - DRONE_SECRET=${DRONE_SECRET}
+          
+    docker-compose up -d
 
 
 ## Drone Client
@@ -76,7 +78,7 @@
 3.- Activate the repo in the Drone server
 
     make sure the lab admin has enabled your github account in the lab server
-    go to drone server url, login / authorize drone, activate repo
+    go to EC2_URL, login / authorize drone, activate repo
     
 4.- Build secrets file
 
