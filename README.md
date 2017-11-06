@@ -18,11 +18,11 @@
 
 4.- Configure GitHub
 
-	Click on user - Settings 
+	Click on User - Settings 
 	Go to Developer setting in the lower left 
 	OAuth Applications - Register a new application
 	Name, http://EC2_URL, Description, http://EC2_URL/authorization
-	Register application, and you get ‘Client ID’ (DRONE_GITHUB_CLIENT) and ‘Client Secret’ (DRONE_GITHUB_SECRET)
+	Register application, and get your ‘Client ID’ (DRONE_GITHUB_CLIENT) and ‘Client Secret’ (DRONE_GITHUB_SECRET)
 
 5.- Install Drone
 
@@ -59,3 +59,7 @@
         environment:
           - DRONE_SERVER=ws://drone-server:8000/ws/broker
           - DRONE_SECRET=${DRONE_SECRET}
+
+6.- Configure Drone
+
+    From you local workstation's browser go to EC2_URL
