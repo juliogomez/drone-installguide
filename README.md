@@ -60,6 +60,9 @@
           - DRONE_SERVER=ws://drone-server:8000/ws/broker
           - DRONE_SECRET=${DRONE_SECRET}
 
-6.- Configure Drone
+6.- Configure Drone locally
 
     From you local workstation's browser go to EC2_URL
+    Activate relevant repos
+    Click on 'Show Token' and copy it (set DRONE_TOKEN)
+    Set DRONE_SERVER to http://EC2_URL
