@@ -2,21 +2,65 @@
 
 ## Drone Build Server
 
-1.- Create EC2 instance, with SG opening SSH & TCP. Its DNS name (EC2_URL) will be used as DRONE_HOST later in step 5.
+1.- Create an Ubuntu 16.04 instance in EC2, with SG opening SSH & TCP. Its DNS name (EC2_URL) will be used as DRONE_HOST later.
 
 2.- Install docker
 
-	sudo yum update -y
-	sudo yum install -y docker
-	sudo service docker start
-	sudo usermod -a -G docker ec2-user
-	log out and back in
+	Option 1 (tested)
+		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+		sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+		sudo apt-get update
+		apt-cache policy docker-ce
+		sudo apt-get install -y docker-ce
+		sudo systemctl status docker
 
-3.- Install docker-compose
+	Option 2 (untested)
+		sudo yum update -y
+		sudo yum install -y docker
+		sudo service docker start
+
+	sudo usermod -a -G docker ec2-user
+	(log out and back in)
+
+3.- Install docker-compose (optional)
 
 	sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 		(check what's the latest version from https://github.com/docker/compose/releases)
 	sudo chmod +x /usr/local/bin/docker-compose
+
+4.- Install Nginx
+
+	sudo apt-get update
+	sudo apt-get install nginx
+	sudo ufw status (check it is inactive)
+	systemctl status nginx (check nginx status)
+	Option 1:
+		ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' (check your IP and try access from browser)
+	Option 2:
+		sudo apt-get install curl
+		curl -4 icanhazip.com (check your IP and try access from browser)
+	Manage Nginx with:
+		sudo systemctl stop/start/restart/reload nginx
+	Default html content served from: /var/www/html
+	Nginx configuration stored here: /etc/nginx
+	
+5.- Secure Nginx with Let's Encrypt
+
+	Create a fully registered domain name (free on freenom.com) with an A record for <yourdomain.com> pointing to the public IP address of your server, and another A record for <www.yourdomain.com> pointing to the same IP
+	
+	sudo add-apt-repository ppa:certbot/certbot
+	sudo apt-get update
+	sudo apt-get install python-certbot-nginx
+	sudo nano /etc/nginx/sites-available/default
+		find server_name and replace _ with <yourdomain.com> <www.yourdomain.com>;
+	sudo nginx -t
+	sudo systemctl reload nginx
+	
+	sudo certbot --nginx -d <yourdomain.com> -d <www.yourdomain.com>
+	
+	Try reloading your website using https://
+	
+	sudo certbot renew --dry-run
 
 4.- Configure GitHub
 
@@ -28,41 +72,23 @@
 
 5.- Install Drone Server
 
-	docker pull drone/drone:0.7
 	sudo mkdir /etc/drone
-	sudo vi /etc/drone/docker-compose.yml
+	sudo vi /etc/drone/dronerc
 
-    version: '2'
-
-    services:
-      drone-server:
-        image: drone/drone:0.7
-        ports:
-          - 80:8000
-        volumes:
-          - /var/lib/drone:/var/lib/drone/
-        restart: always
-        environment:
-          - DRONE_OPEN=true
-          - DRONE_HOST=${DRONE_HOST}
-          - DRONE_GITHUB=true
-          - DRONE_GITHUB_CLIENT=${DRONE_GITHUB_CLIENT}
-          - DRONE_GITHUB_SECRET=${DRONE_GITHUB_SECRET}
-          - DRONE_SECRET=${DRONE_SECRET}
-    
-      drone-agent:
-        image: drone/drone:0.7
-        command: agent
-        restart: always
-        depends_on:
-          - drone-server
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-        environment:
-          - DRONE_SERVER=ws://drone-server:8000/ws/broker
-          - DRONE_SECRET=${DRONE_SECRET}
-          
-    docker-compose up -d
+		REMOTE_DRIVER=github
+		REMOTE_CONFIG=https://github.com?client_id=${client_id}&client_secret=${client_secret}
+		DATABASE_DRIVER=sqlite3
+		DATABASE_CONFIG=/var/lib/drone/drone.sqlite
+	
+	sudo docker run \
+	--volume /var/lib/drone:/var/lib/drone \
+	--volume /var/run/docker.sock:/var/run/docker.sock \
+	--env-file /etc/drone/dronerc \
+	--restart=always \
+	--publish=8000:8000 \
+	--detach=true \
+	--name=drone \
+	drone/drone:0.4
 
 
 ## Drone Client
