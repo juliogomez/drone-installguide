@@ -34,11 +34,13 @@
 	sudo apt-get install nginx
 	sudo ufw status (check it is inactive)
 	systemctl status nginx (check nginx status)
+	
 	Option 1:
 		ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' (check your IP and try access from browser)
 	Option 2:
 		sudo apt-get install curl
 		curl -4 icanhazip.com (check your IP and try access from browser)
+
 	Manage Nginx with:
 		sudo systemctl stop/start/restart/reload nginx
 	Default html content served from: /var/www/html
@@ -46,17 +48,17 @@
 	
 5.- Secure Nginx with Let's Encrypt
 
-	Create a fully registered domain name (free on freenom.com) with an A record for <yourdomain.com> pointing to the public IP address of your server, and another A record for <www.yourdomain.com> pointing to the same IP
+	Create a fully registered domain name (free on freenom.com) with an A record for yourdomain.com pointing to the public IP address of your server, and another A record for www.yourdomain.com pointing to the same IP
 	
 	sudo add-apt-repository ppa:certbot/certbot
 	sudo apt-get update
 	sudo apt-get install python-certbot-nginx
 	sudo nano /etc/nginx/sites-available/default
-		find server_name and replace _ with <yourdomain.com> <www.yourdomain.com>;
+		find server_name and replace _ with yourdomain.com www.yourdomain.com;
 	sudo nginx -t
 	sudo systemctl reload nginx
 	
-	sudo certbot --nginx -d <yourdomain.com> -d <www.yourdomain.com>
+	sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 	
 	Try reloading your website using https://
 	
