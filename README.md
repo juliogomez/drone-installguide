@@ -78,7 +78,7 @@
 	sudo vi /etc/drone/dronerc
 
 		REMOTE_DRIVER=github
-		REMOTE_CONFIG=https://github.com?client_id=${client_id}&client_secret=${client_secret}
+		REMOTE_CONFIG=https://github.com?client_id=DRONE_GITHUB_CLIENT&client_secret=DRONE_GITHUB_SECRET
 		DATABASE_DRIVER=sqlite3
 		DATABASE_CONFIG=/var/lib/drone/drone.sqlite
 	
