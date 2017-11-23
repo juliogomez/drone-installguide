@@ -155,7 +155,7 @@
     make sure the lab admin has enabled your github account in the lab server
     go to yourdomain.com, login / authorize drone to access your repo, activate repo
     
-4.- Build secrets file and push it to Git
+4.- Build secrets file and push to Git
 
     cd ~/coding/cicd_demoapp
     export DRONE_SERVER=http://yourdomain.com
@@ -173,3 +173,25 @@
         git add .drone.yml
         git commit -m "<your_comment>"
         git push
+
+    vi .drone.yml
+    	build:
+	    build_starting:
+		image: python:2
+		commands:
+		    - echo "Beginning new build"
+	    run_tests:
+		image: python:2-alpine
+		commands:
+		    - pip install -r requirements.txt
+		    - python testing.py
+
+        publish:
+	    docker:
+		repo: $$DOCKER_USERNAME/cicd_demoapp
+		tag: latest
+		username: $$DOCKER_USERNAME
+		password: $$DOCKER_PASSWORD
+		email: $$DOCKER_EMAIL 
+		storage_driver: overlay
+			(without this command CentOS and RHL default to device mapper storage driver, and the system cannot connect to docker daemon)
