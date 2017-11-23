@@ -1,4 +1,4 @@
-# Quick guide to install Drone Server on AWS and how to use a local Drone Client
+# Quick guide to install Drone Server 0.4 on AWS and how to use a local Drone Client to access it
 
 ## Drone Build Server
 
