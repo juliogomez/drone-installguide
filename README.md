@@ -152,7 +152,7 @@
 	
 2.- Fork imapex-training/cicd_demoapp github repo and clone your copy to your local env, and create docker repo with the same name
 
-3.- Activate the repo in the Drone server
+3.- Activate repo in the Drone server
 
     make sure the lab admin has enabled your github account in the lab server
     go to yourdomain.com, login / authorize drone to access your repo, activate repo
