@@ -2,7 +2,7 @@
 
 ## Drone Build Server
 
-1.- Create an Ubuntu 16.04 instance in EC2, with SG opening SSH & TCP. 
+1.- Create an Ubuntu 16.04 instance in EC2, with a Security Group that allows SSH, HTTP and HTTPS traffic. 
 
 2.- Install docker
 
