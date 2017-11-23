@@ -64,15 +64,15 @@
 	
 	sudo certbot renew --dry-run
 
-4.- Configure GitHub
+4.- Register Drone app in GitHub
 
 	Click on User - Settings 
 	Go to Developer setting in the lower left 
 	OAuth Applications - Register a new application
-	Name, http://EC2_URL, Description, http://EC2_URL/authorization
+	Name, http://www.yourdomain.com, Description, http://www.yourdomain.com/authorization
 	Register application, and get your ‘Client ID’ (DRONE_GITHUB_CLIENT) and ‘Client Secret’ (DRONE_GITHUB_SECRET)
 
-5.- Install Drone Server
+5.- Install Drone Server 0.4
 
 	sudo mkdir /etc/drone
 	sudo vi /etc/drone/dronerc
@@ -91,6 +91,60 @@
 	--detach=true \
 	--name=drone \
 	drone/drone:0.4
+
+	sudo vi /etc/systemd/system/drone.service
+	
+		[Unit]
+		Description=Drone server
+		After=docker.service nginx.service
+
+		[Service]
+		Restart=always
+		ExecStart=/usr/local/bin/docker run --volume /var/lib/drone:/var/lib/drone --volume /var/run/docker.sock:/var/run/docker.sock --env-file /etc/drone/dronerc --restart=always --publish=8000:8000 --detach=true --name=drone drone/drone:0.4
+		ExecStop=/usr/local/bin/docker rm -f drone
+
+		[Install]
+		WantedBy=multi-user.target
+
+6.- Configure Nginx to proxy requests to Drone
+
+	grep -R server_name /etc/nginx/sites-enabled
+		server_name yourdomain.com www.yourdomain.com;
+	sudo vi /etc/nginx/sites-enabled/default
+		add this OUT of the server block:
+			upstream drone {
+			    server 127.0.0.1:8000;
+			}
+
+			map $http_upgrade $connection_upgrade {
+			    default upgrade;
+			    ''      close;
+			}
+
+			server {
+			    . . .
+		replace the content of 'location' under server listening for 443 ssh
+			location / {
+				# try_files $uri $uri/ =404;
+				proxy_pass http://drone;
+
+				include proxy_params;
+				proxy_set_header Upgrade $http_upgrade;
+				proxy_set_header Connection $connection_upgrade;
+
+				proxy_redirect off;
+				proxy_http_version 1.1;
+				proxy_buffering off;
+				chunked_transfer_encoding off;
+				proxy_read_timeout 86400;
+			}
+
+7.- Test and restart Nginx and Drone
+
+	sudo nginx -t
+	sudo systemctl restart nginx
+	sudo systemctl start drone
+	sudo systemctl status drone
 
 
 ## Drone Client
