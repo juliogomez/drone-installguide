@@ -144,37 +144,29 @@
 ## Drone Client
 
 
-1.- Install Drone CLI (example for Mac)
+1.- Run CICD client demo container (it includes nano, git, docker, drone cli tools). If you need the container to RUN containers: docker run -it --name cicdlab -v /var/run/docker.sock:/var/run/docker.sock hpreston/devbox:cicdlab
 
-     curl http://downloads.drone.io/drone-cli/drone_darwin_amd64.tar.gz | tar zx
-     sudo cp drone /usr/local/bin
-
-2.- Create github and docker repos with the same name
+	docker run -it --name cicdlab hpreston/devbox:cicdlab
+	
+2.- Fork imapex-training/cicd_demoapp github repo and clone your copy to your local env, and create docker repo with the same name
 
 3.- Activate the repo in the Drone server
 
     make sure the lab admin has enabled your github account in the lab server
     go to yourdomain.com, login / authorize drone to access your repo, activate repo
     
-4.- Build secrets file
+4.- Build secrets file and push it to Git
 
-    cd to your local repo
+    cd ~/coding/cicd_demoapp
     export DRONE_SERVER=http://yourdomain.com
     export DRONE_TOKEN=<your_token>
         (token can be found by going to yourdomain.com, click on the user, go to profile, click on show token and copy the value)
     drone repo ls
+    cp drone_secrets_sample.yml drone_secrets.yml
     vi drone_secrets.yml
-    
-    environment:
-    SPARK_TOKEN: <FROM YOUR DEVELOPER.CISCOSPARK.COM ACCOUNT>
-    SPARK_ROOM: <EITHER ONE OF YOUR OWN ROOMS, OR A ROOMID PROVIDED BY THE LAB ADMIN>
-    DOCKER_USERNAME: <YOUR HUB.DOCKER.COM USERNAME>
-    DOCKER_PASSWORD: <YOUR HUB.DOCKER.COM PASSWORD>
-    DOCKER_EMAIL: <YOUR HUB.DOCKER.COM EMAIL ADDRESS>
-    MANTL_USERNAME: <MANTL USER PROVIDED BY LAB ADMIN>
-    MANTL_PASSWORD: <MANTL PASSWORD PROVIDED BY LAB ADMIN>
-    MANTL_CONTROL: <MANTL SERVER ADDRESS PROVIDED BY LAB ADMIN>
-    
-    (DO NOT ADD / COMMIT IT TO YOUR REPO)
-    
-    drone secure --repo <username>/<repo> --in drone_secrets.yml
+        (complete it with the required info but DO NOT ADD / COMMIT IT TO YOUR REPO)
+    drone secure --repo <username>/cicd_demoapp --in drone_secrets.yml
+    	(this creates an encrypted .drone.sec file)
+    git add .drone.sec
+    git commit -m "Added .drone.sec file"
+    git push
