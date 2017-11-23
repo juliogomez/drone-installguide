@@ -2,7 +2,7 @@
 
 ## Drone Build Server
 
-1.- Create an Ubuntu 16.04 instance in EC2, with SG opening SSH & TCP. Its DNS name (EC2_URL) will be used as DRONE_HOST later.
+1.- Create an Ubuntu 16.04 instance in EC2, with SG opening SSH & TCP. 
 
 2.- Install docker
 
@@ -22,13 +22,7 @@
 	sudo usermod -a -G docker ec2-user
 	(log out and back in)
 
-3.- Install docker-compose (optional)
-
-	sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-		(check what's the latest version from https://github.com/docker/compose/releases)
-	sudo chmod +x /usr/local/bin/docker-compose
-
-4.- Install Nginx
+3.- Install Nginx
 
 	sudo apt-get update
 	sudo apt-get install nginx
@@ -46,9 +40,9 @@
 	Default html content served from: /var/www/html
 	Nginx configuration stored here: /etc/nginx
 	
-5.- Secure Nginx with Let's Encrypt
+4.- Secure Nginx with Let's Encrypt
 
-	Create a fully registered domain name (free on freenom.com) with an A record for yourdomain.com pointing to the public IP address of your server, and another A record for www.yourdomain.com pointing to the same IP
+	Create a fully registered domain name (free on freenom.com) with an A record for yourdomain.com pointing to the public IP address of your EC2 server, and another A record for www.yourdomain.com pointing to the same IP
 	
 	sudo add-apt-repository ppa:certbot/certbot
 	sudo apt-get update
@@ -64,7 +58,7 @@
 	
 	sudo certbot renew --dry-run
 
-4.- Register Drone app in GitHub
+5.- Register Drone app in GitHub
 
 	Click on User - Settings 
 	Go to Developer setting in the lower left 
@@ -72,7 +66,7 @@
 	Name, http://www.yourdomain.com, Description, http://www.yourdomain.com/authorization
 	Register application, and get your ‘Client ID’ (DRONE_GITHUB_CLIENT) and ‘Client Secret’ (DRONE_GITHUB_SECRET)
 
-5.- Install Drone Server 0.4
+6.- Install Drone Server 0.4
 
 	sudo mkdir /etc/drone
 	sudo vi /etc/drone/dronerc
@@ -106,7 +100,7 @@
 		[Install]
 		WantedBy=multi-user.target
 
-6.- Configure Nginx to proxy requests to Drone
+7.- Configure Nginx to proxy requests to Drone
 
 	grep -R server_name /etc/nginx/sites-enabled
 		server_name yourdomain.com www.yourdomain.com;
@@ -139,7 +133,7 @@
 				proxy_read_timeout 86400;
 			}
 
-7.- Test and restart Nginx and Drone
+8.- Test and restart Nginx and Drone
 
 	sudo nginx -t
 	sudo systemctl restart nginx
