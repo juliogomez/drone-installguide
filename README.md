@@ -170,6 +170,6 @@
         drone secure --repo <username>/cicd_demoapp --in drone_secrets.yml
             (this creates an encrypted .drone.sec file)
         git add .drone.sec
-	git add .drone.yml
+        git add .drone.yml
         git commit -m "<your_comment>"
         git push
