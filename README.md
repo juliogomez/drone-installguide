@@ -194,4 +194,4 @@
                 password: $$DOCKER_PASSWORD
                 email: $$DOCKER_EMAIL 
                 storage_driver: overlay
-                    (Without this command CentOS and RHL default to device mapper storage driver.  That graph driver isn't very friendly to Docker in Docker. What happens in that on start it creates 2 loop back devices. When the container dies those don't get freed. So usually after 4 times you are out of devices, and the system cannot connect to docker daemon)
+                    (Without this command CentOS and RHL default to device mapper storage driver. That graph driver isn't very friendly to Docker in Docker. What happens in that on start it creates 2 loop back devices. When the container dies those don't get freed. So usually after 4 times you are out of devices, and the system cannot connect to docker daemon)
