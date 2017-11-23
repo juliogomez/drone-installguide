@@ -165,8 +165,11 @@
     cp drone_secrets_sample.yml drone_secrets.yml
     vi drone_secrets.yml
         (complete it with the required info but DO NOT ADD / COMMIT IT TO YOUR REPO)
-    drone secure --repo <username>/cicd_demoapp --in drone_secrets.yml
-    	(this creates an encrypted .drone.sec file)
-    git add .drone.sec
-    git commit -m "Added .drone.sec file"
-    git push
+	
+    Every time you change the .drone.yml file:
+        drone secure --repo <username>/cicd_demoapp --in drone_secrets.yml
+            (this creates an encrypted .drone.sec file)
+        git add .drone.sec
+	git add .drone.yml
+        git commit -m "<your_comment>"
+        git push
