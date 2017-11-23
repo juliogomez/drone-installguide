@@ -195,3 +195,14 @@
                 email: $$DOCKER_EMAIL 
                 storage_driver: overlay
                     (Without this command CentOS and RHL default to device mapper storage driver. That graph driver isn't very friendly to Docker in Docker. What happens in that on start it creates 2 loop back devices. When the container dies those don't get freed. So usually after 4 times you are out of devices, and the system cannot connect to docker daemon)
+		    
+        deploy:
+            webhook:
+                image: plugins/drone-webhook
+                skip_verify: true
+                method: POST
+                auth:
+                    username: $$MANTL_USERNAME
+                    password: $$MANTL_PASSWORD
+               urls:
+                    - https://$$MANTL_CONTROL/marathon/v2/apps/class/$$DOCKER_USERNAME/restart?force=true
