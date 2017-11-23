@@ -144,7 +144,7 @@
 ## Drone Client
 
 
-1.- Install Drone CLI (Mac)
+1.- Install Drone CLI (example for Mac)
 
      curl http://downloads.drone.io/drone-cli/drone_darwin_amd64.tar.gz | tar zx
      sudo cp drone /usr/local/bin
@@ -154,14 +154,14 @@
 3.- Activate the repo in the Drone server
 
     make sure the lab admin has enabled your github account in the lab server
-    go to EC2_URL, login / authorize drone, activate repo
+    go to yourdomain.com, login / authorize drone to access your repo, activate repo
     
 4.- Build secrets file
 
     cd to your local repo
-    export DRONE_SERVER=http://EC2_URL
+    export DRONE_SERVER=http://yourdomain.com
     export DRONE_TOKEN=<your_token>
-        (token can be found by going to EC2_URL, click on the user, go to profile, click on show token and copy the value)
+        (token can be found by going to yourdomain.com, click on the user, go to profile, click on show token and copy the value)
     drone repo ls
     vi drone_secrets.yml
     
