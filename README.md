@@ -205,4 +205,4 @@
                     username: $$MANTL_USERNAME
                     password: $$MANTL_PASSWORD
                 urls:
-                    - https://$$MANTL_CONTROL/marathon/v2/apps/class/$$DOCKER_USERNAME/restart?force=true
+                    - https://$$MANTL_CONTROL/v2/apps/class/$$DOCKER_USERNAME/restart?force=true
