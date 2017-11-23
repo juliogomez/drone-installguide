@@ -75,6 +75,8 @@
 		REMOTE_CONFIG=https://github.com?client_id=DRONE_GITHUB_CLIENT&client_secret=DRONE_GITHUB_SECRET
 		DATABASE_DRIVER=sqlite3
 		DATABASE_CONFIG=/var/lib/drone/drone.sqlite
+		PLUGIN_FILTER=*/*
+			(so that we can use the Spark plugin later on)
 	
 	sudo docker run \
 	--volume /var/lib/drone:/var/lib/drone \
@@ -206,3 +208,9 @@
                     password: $$MANTL_PASSWORD
                 urls:
                     - https://$$MANTL_CONTROL/v2/apps/class/$$DOCKER_USERNAME/restart?force=true
+
+        notify:
+            spark:
+                image: hpreston/drone-spark
+                auth_token: $$SPARK_TOKEN
+                roomId: $$SPARK_ROOM 
