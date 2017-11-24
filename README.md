@@ -202,12 +202,24 @@
             webhook:
                 image: plugins/drone-webhook
                 skip_verify: true
+                method: DELETE
+                auth:
+                    username: $$MANTL_USERNAME
+                    password: $$MANTL_PASSWORD
+                urls:
+                    - https://$$MANTL_CONTROL/v2/apps/class/$$DOCKER_USERNAME
+                content_type: application/json	
+            webhook:
+                image: plugins/drone-webhook
+                skip_verify: true
                 method: POST
                 auth:
                     username: $$MANTL_USERNAME
                     password: $$MANTL_PASSWORD
                 urls:
-                    - https://$$MANTL_CONTROL/v2/apps/class/$$DOCKER_USERNAME/restart?force=true
+                    - https://$$MANTL_CONTROL/v2/apps
+                content_type: application/json
+                template: '{"container": {"type": "DOCKER","docker": {"image": "$$DOCKER_USERNAME/cicd_demoapp:latest","forcePullImage": true,"network": "BRIDGE","portMappings": [{"containerPort": 80,"hostPort": 0}]},"forcePullImage": true},"healthChecks": [{"protocol": "TCP","portIndex": 0}],"id": "/class/$$DOCKER_USERNAME","instances": 1,"cpus": 0.1,"mem": 16,"env": {}}'
 
         notify:
             spark:
