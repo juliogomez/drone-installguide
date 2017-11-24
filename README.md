@@ -150,7 +150,7 @@
 
 	docker run -it --name cicdlab hpreston/devbox:cicdlab
 	
-2.- Fork imapex-training/cicd_demoapp github repo and clone your copy to your local env, and create docker repo with the same name
+2.- Fork imapex-training/cicd_demoapp github repo, clone your copy to your local env, and create docker repo with the same name
 
 3.- Activate repo in the Drone server
 
@@ -214,3 +214,8 @@
                 image: hpreston/drone-spark
                 auth_token: $$SPARK_TOKEN
                 roomId: $$SPARK_ROOM 
+
+    Every time you change any other file in the repo:
+        git add <file>
+        git commit -m "<your_comment>"
+        git push
